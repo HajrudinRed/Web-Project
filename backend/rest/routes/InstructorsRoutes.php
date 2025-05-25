@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/InstructorsService.class.php';
+require_once __DIR__ . '/../../data/roles.php';
 
 Flight::set('instructorsService', new InstructorsService());
 
@@ -18,6 +19,7 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('GET /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('instructorsService')->getInstructors();
         Flight::json(["data" => $data]);
     });
@@ -35,6 +37,7 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('GET /@instructor_id', function($instructor_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $instructor = Flight::get('instructorsService')->getInstructorByID($instructor_id);
         Flight::json($instructor, 200);
     });
@@ -62,6 +65,7 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('POST /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
 
         if (isset($payload['id']) && !empty($payload['id'])) {
@@ -97,6 +101,7 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('PUT /@instructor_id', function($instructor_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
         $payload['id'] = $instructor_id;
 
@@ -117,6 +122,7 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('DELETE /@instructor_id', function($instructor_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         if (empty($instructor_id)) {
             Flight::halt(500, "You must provide a valid instructor ID!");
         }

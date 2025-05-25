@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/CategoriesService.class.php';
+require_once __DIR__ . '/../../data/roles.php';
 
 Flight::set('categoriesService', new CategoriesService());
 
@@ -18,6 +19,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('GET /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('categoriesService')->getCategories();
         Flight::json(["data" => $data]);
     });
@@ -35,6 +37,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('GET /@category_id', function($category_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $category = Flight::get('categoriesService')->getCategoryByID($category_id);
         Flight::json($category, 200);
     });
@@ -62,6 +65,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('POST /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
 
         if (isset($payload['id']) && !empty($payload['id'])) {
@@ -97,6 +101,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('PUT /@category_id', function($category_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
         $payload['id'] = $category_id;
 
@@ -117,6 +122,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('DELETE /@category_id', function($category_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         if (empty($category_id)) {
             Flight::halt(500, "You must provide a valid category ID!");
         }

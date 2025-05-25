@@ -6,6 +6,27 @@ require_once __DIR__ . '/UserDao.class.php';
 $user_dao = new UserDao();
 $instructors_dao = new InstructorsDao();
 
+for ($i = 1; $i <= 10; $i++) {
+    $new_user = [
+        "name" => "Instructor $i",
+        "email" => "instructors$i@example.com",
+        "password" => "password1$i",
+        "role" => "instructor"
+    ];
+    $added_user = $user_dao->addUser($new_user);
+
+    $new_instructor = [
+        "user_id" => $added_user['id'],
+        "bio" => "Bio for Instructor $i",
+        "qualification" => "Qualification $i",
+        "experience_years" => 5 + $i,
+        "profile_picture_url" => "https://example.com/instructors$i.jpg"
+    ];
+    $added_instructor = $instructors_dao->addInstructor($new_instructor);
+    print_r($added_instructor);
+}
+
+/*
 // Add a new user (required for the foreign key constraint)
 $new_user = [
     "name" => "John Doe",
@@ -53,4 +74,4 @@ print_r($instructors_dao->getInstructorByID($instructor_id));
 // Delete the user (optional cleanup)
 //$user_dao->deleteUser($added_user['id']);
 //print_r($user_dao->getUsers());
-?>
+?>*/

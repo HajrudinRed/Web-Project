@@ -4,6 +4,18 @@ require_once __DIR__ . '/ReviewsDao.class.php';
 
 $reviews_dao = new ReviewsDao();
 
+for ($i = 1; $i <= 10; $i++) {
+    $new_review = [
+        "user_id" => $user_ids[array_rand($user_ids)],
+        "course_id" => $course_ids[array_rand($course_ids)],
+        "rating" => rand(1, 5),
+        "review_text" => "Review text $i"
+    ];
+    $added_review = $reviews_dao->addReview($new_review);
+    print_r($added_review);
+}
+
+/*
 // Add a new review
 $new_review = [
     "rating" => 5,
@@ -32,4 +44,4 @@ print_r($reviews_dao->getReviewByID($review_id));
 // Delete the review
 //$reviews_dao->deleteReview($review_id);
 //print_r($reviews_dao->getReviews());
-?>
+?>*/

@@ -4,6 +4,18 @@ require_once __DIR__ . '/CategoriesDao.class.php';
 
 $categories_dao = new CategoriesDao();
 
+for ($i = 1; $i <= 10; $i++) {
+    $new_category = [
+        "name" => "Category $i",
+        "number_of_courses" => 5 + $i,
+        "image_url" => "https://example.com/category$i.jpg",
+        "description" => "Description for Category $i"
+    ];
+    $added_category = $categories_dao->addCategory($new_category);
+    print_r($added_category);
+}
+
+/*
 // Add a new category
 $new_category = [
     "name" => "Programming",
@@ -36,4 +48,4 @@ print_r($categories_dao->getCategoryByID($category_id));
 // Delete the category
 //$categories_dao->deleteCategory($category_id);
 //print_r($categories_dao->getCategories());
-?>
+?>*/

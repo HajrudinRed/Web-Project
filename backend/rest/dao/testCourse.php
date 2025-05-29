@@ -4,6 +4,17 @@ require_once __DIR__ . '/CoursesDao.class.php';
 
 $courses_dao = new CoursesDao();
 
+for ($i = 1; $i <= 10; $i++) {
+    $new_course = [
+        "title" => "Course $i",
+        "description" => "Description for Course $i",
+        "category" => "Category " . (($i % 10) + 1)
+    ];
+    $added_course = $courses_dao->addCourse($new_course);
+    print_r($added_course);
+}
+
+/*
 // Add a new course
 $new_course = [
     "title" => "Introduction to Programming",
@@ -34,4 +45,4 @@ print_r($courses_dao->getCourseByID($course_id));
 // Delete the course
 //$courses_dao->deleteCourse($course_id);
 //print_r($courses_dao->getCourses());
-?>
+?>*/

@@ -1,6 +1,9 @@
 <?php
 
 require_once __DIR__ . '/../services/UserService.class.php';
+require_once __DIR__ . '/../utils/Validation.php';
+require_once __DIR__ . '/../utils/Logger.php';
+require_once __DIR__ . '/../../data/roles.php';
 
 Flight::set('userService', new UserService());
 
@@ -18,6 +21,7 @@ Flight::group('/users', function() {
      * )
      */
     Flight::route('GET /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $data = Flight::get('userService')->getUsers();
         Flight::json(["data" => $data]);
     });
@@ -35,6 +39,7 @@ Flight::group('/users', function() {
      * )
      */
     Flight::route('GET /@user_id', function($user_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $user = Flight::get('userService')->getUserByID($user_id);
         Flight::json($user, 200);
     });
@@ -62,7 +67,13 @@ Flight::group('/users', function() {
      * )
      */
     Flight::route('POST /', function() {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
+    
+        //Logger:
+        Logger::log("Registration attempt: " . json_encode($payload));
+        //Validation:
+        Validation::require_fields($payload, ['email', 'password']);
 
         if (isset($payload['id']) && !empty($payload['id'])) {
             $user = Flight::get('userService')->editUser($payload);
@@ -96,6 +107,7 @@ Flight::group('/users', function() {
      * )
      */
     Flight::route('PUT /@user_id', function($user_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
         $payload = Flight::request()->data->getData();
         $payload['id'] = $user_id;
 
@@ -116,6 +128,7 @@ Flight::group('/users', function() {
      * )
      */
     Flight::route('DELETE /@user_id', function($user_id) {
+        Flight::auth_middleware()->authorizeRole(Roles::ADMIN); 
         if (empty($user_id)) {
             Flight::halt(500, "You must provide a valid user ID!");
         }

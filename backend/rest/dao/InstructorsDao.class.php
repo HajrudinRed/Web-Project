@@ -39,6 +39,7 @@ class InstructorsDao extends BaseDao {
         $query = "UPDATE instructors SET bio = :bio, qualification = :qualification, experience_years = :experience_years, profile_picture_url = :profile_picture_url WHERE id = :id";
 
         $this->execute($query, [
+            "user_id" => $added_user['id'],
             'id' => $instructor_id,
             'bio' => $instructor['bio'],
             'qualification' => $instructor['qualification'],

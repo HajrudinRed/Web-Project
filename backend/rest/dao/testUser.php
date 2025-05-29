@@ -4,6 +4,21 @@ require_once __DIR__ . '/UserDao.class.php';
 
 $user_dao = new UserDao();
 
+$user_dao = new UserDao();
+print_r($user_dao->getUsers());
+
+for ($i = 1; $i <= 10; $i++) {
+    $new_user = [
+        "name" => "User $i",
+        "email" => "user$i@example.com",
+        "password" => "password$i",
+        "role" => ($i % 3 == 0 ? "admin" : ($i % 2 == 0 ? "instructor" : "student"))
+    ];
+    $added_user = $user_dao->addUser($new_user);
+    print_r($added_user);
+}
+
+/*
 // Add a new user
 $new_user = [
     "name" => "John Doe",
@@ -37,3 +52,4 @@ print_r($user_dao->getUserByID($user_id));
 //$user_dao->deleteUser($user_id);
 //print_r($user_dao->getUsers());
 ?>
+*/

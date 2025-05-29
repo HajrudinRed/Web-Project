@@ -8,22 +8,30 @@ class Config
 {
     public static function DB_NAME()
     {
-        return 'webdatabase';
+        return Config::get_env('DB_NAME','webdatabase');
     }
     public static function DB_PORT()
     {
-        return  3306;
+        return Config::get_env('DB_PORT','3306');
     }
     public static function DB_USER()
     {
-        return 'root';
+        return Config::get_env('DB_USER','root');
     }
     public static function DB_PASS()
     {
-        return '';
+        return Config::get_env('DB_PASS','');
     }
     public static function DB_HOST()
     {
-        return 'localhost';
+        return Config::get_env('DB_HOST','localhost');
     }
+    // JWT Secret Key Definition
+    public static function JWT_SECRET() {
+        return Config::get_env("JWT_SECRET", 'H$p[M!a4U5Hz2[8;+rP&p}6QS$$qL!');
+    }
+    public static function get_env($name, $default) {
+        return isset($_ENV[$name]) && trim($_ENV[$name]) != "" ? $_ENV[$name] : $default;
+    }
+
 }

@@ -1,0 +1,247 @@
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Admin Dashboard <span id="dashboard-username"></span></h2>
+                    <p class="card-text" id="dashboard-role"></p>
+                    <hr>
+                    <div id="dashboard-content">
+                        <ul class="nav nav-tabs mb-3" id="adminTabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab">Users</a></li>
+                            <li class="nav-item"><a class="nav-link" id="instructors-tab" data-bs-toggle="tab" href="#instructors" role="tab">Instructors</a></li>
+                            <li class="nav-item"><a class="nav-link" id="categories-tab" data-bs-toggle="tab" href="#categories" role="tab">Categories</a></li>
+                            <li class="nav-item"><a class="nav-link" id="courses-tab" data-bs-toggle="tab" href="#courses" role="tab">Courses</a></li>
+                            <li class="nav-item"><a class="nav-link" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab">Reviews</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <!-- Users Table -->
+                            <div class="tab-pane fade show active" id="users" role="tabpanel">
+                                <button class="btn btn-success mb-2" id="add-user-btn">Add User</button>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="users-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Instructors Table -->
+                            <div class="tab-pane fade" id="instructors" role="tabpanel">
+                                <button class="btn btn-success mb-2" id="add-instructor-btn">Add Instructor</button>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="instructors-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th><th>User ID</th><th>Bio</th><th>Qualification</th><th>Experience</th><th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Categories Table -->
+                            <div class="tab-pane fade" id="categories" role="tabpanel">
+                                <button class="btn btn-success mb-2" id="add-category-btn">Add Category</button>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="categories-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th><th>Name</th><th>Courses</th><th>Description</th><th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Courses Table -->
+                            <div class="tab-pane fade" id="courses" role="tabpanel">
+                                <button class="btn btn-success mb-2" id="add-course-btn">Add Course</button>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="courses-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th><th>Title</th><th>Instructor</th><th>Category</th><th>Description</th><th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Reviews Table -->
+                            <div class="tab-pane fade" id="reviews" role="tabpanel">
+                                <button class="btn btn-success mb-2" id="add-review-btn">Add Review</button>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="reviews-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th><th>User</th><th>Course</th><th>Rating</th><th>Review</th><th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal placeholder for Add/Edit forms -->
+                        <div id="admin-modal-placeholder"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// --- User info ---
+function getUserFromToken() {
+    const token = localStorage.getItem('jwt_token');
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.user || payload;
+    } catch (e) {
+        return null;
+    }
+}
+$(function() {
+    const user = getUserFromToken();
+    if (user) {
+        $('#dashboard-username').text(user.name || user.email || 'User');
+        $('#dashboard-role').text('Role: ' + (user.role || 'N/A'));
+        if (user.role !== 'admin') {
+            $('#dashboard-content').html('<div class="alert alert-danger">You do not have permission to view this page.</div>');
+            return;
+        }
+        // Load all tables
+        loadUsers();
+        loadInstructors();
+        loadCategories();
+        loadCourses();
+        loadReviews();
+    } else {
+        $('#dashboard-username').text('Guest');
+        $('#dashboard-content').html('<div class="alert alert-warning">You are not logged in. Please <a href="../login/login.html">login</a> to see your dashboard.</div>');
+    }
+});
+
+// --- Example AJAX table loaders (replace URLs with your API endpoints) ---
+function loadUsers() {
+    $.ajax({
+        url: '/backend/users', // adjust to your API endpoint
+        headers: { 'Authentication': localStorage.getItem('jwt_token') },
+        success: function(data) {
+            let html = '';
+            (data.data || []).forEach(function(u) {
+                html += `<tr>
+                    <td>${u.id}</td>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td>${u.role}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-user" data-id="${u.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-user" data-id="${u.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
+            $('#users-table tbody').html(html);
+        }
+    });
+}
+function loadInstructors() {
+    $.ajax({
+        url: '/backend/instructors',
+        headers: { 'Authentication': localStorage.getItem('jwt_token') },
+        success: function(data) {
+            let html = '';
+            (data.data || []).forEach(function(i) {
+                html += `<tr>
+                    <td>${i.id}</td>
+                    <td>${i.user_id}</td>
+                    <td>${i.bio}</td>
+                    <td>${i.qualification}</td>
+                    <td>${i.experience_years}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-instructor" data-id="${i.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-instructor" data-id="${i.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
+            $('#instructors-table tbody').html(html);
+        }
+    });
+}
+function loadCategories() {
+    $.ajax({
+        url: '/backend/categories',
+        headers: { 'Authentication': localStorage.getItem('jwt_token') },
+        success: function(data) {
+            let html = '';
+            (data.data || []).forEach(function(c) {
+                html += `<tr>
+                    <td>${c.id}</td>
+                    <td>${c.name}</td>
+                    <td>${c.number_of_courses}</td>
+                    <td>${c.description}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-category" data-id="${c.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-category" data-id="${c.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
+            $('#categories-table tbody').html(html);
+        }
+    });
+}
+function loadCourses() {
+    $.ajax({
+        url: '/backend/courses',
+        headers: { 'Authentication': localStorage.getItem('jwt_token') },
+        success: function(data) {
+            let html = '';
+            (data.data || []).forEach(function(c) {
+                html += `<tr>
+                    <td>${c.id}</td>
+                    <td>${c.title}</td>
+                    <td>${c.instructor_id || ''}</td>
+                    <td>${c.category_id || ''}</td>
+                    <td>${c.description}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-course" data-id="${c.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-course" data-id="${c.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
+            $('#courses-table tbody').html(html);
+        }
+    });
+}
+function loadReviews() {
+    $.ajax({
+        url: '/backend/reviews',
+        headers: { 'Authentication': localStorage.getItem('jwt_token') },
+        success: function(data) {
+            let html = '';
+            (data.data || []).forEach(function(r) {
+                html += `<tr>
+                    <td>${r.id}</td>
+                    <td>${r.user_id}</td>
+                    <td>${r.course_id}</td>
+                    <td>${r.rating}</td>
+                    <td>${r.review_text}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-review" data-id="${r.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-review" data-id="${r.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
+            $('#reviews-table tbody').html(html);
+        }
+    });
+}
+
+// TODO: Add handlers for Add/Edit/Delete buttons and modals for forms.
+
+</script>

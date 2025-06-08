@@ -12,7 +12,6 @@ class UserService extends BaseService {
     }
 
     public function addUser($user) {
-        Logger::log("Registration attempt: " . json_encode($user));
         $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
         return $this->userDao->addUser($user);
     }

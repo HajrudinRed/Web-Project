@@ -1,8 +1,8 @@
 <?php
-
+require_once __DIR__ . "/BaseService.class.php";
 require_once __DIR__ . "/../dao/CategoriesDao.class.php";
 
-class CategoriesService {
+class CategoriesService extends BaseService {
     private $categoriesDao;
 
     public function __construct() {

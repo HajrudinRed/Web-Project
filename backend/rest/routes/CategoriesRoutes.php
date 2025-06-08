@@ -12,6 +12,9 @@ Flight::group('/categories', function() {
      *      path="/categories",
      *      tags={"categories"},
      *      summary="Get all categories",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Get all categories"
@@ -29,6 +32,9 @@ Flight::group('/categories', function() {
      *      path="/categories/{category_id}",
      *      tags={"categories"},
      *      summary="Get category by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Category data, or false if category does not exist"
@@ -47,6 +53,9 @@ Flight::group('/categories', function() {
      *      path="/categories",
      *      tags={"categories"},
      *      summary="Add or update a category",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Category data, or exception if category is not added properly"
@@ -83,6 +92,9 @@ Flight::group('/categories', function() {
      *      path="/categories/{category_id}",
      *      tags={"categories"},
      *      summary="Edit category by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Updated category data"
@@ -114,6 +126,9 @@ Flight::group('/categories', function() {
      *      path="/categories/{category_id}",
      *      tags={"categories"},
      *      summary="Delete category by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Deleted category data or 500 status code exception otherwise"

@@ -14,6 +14,9 @@ Flight::group('/users', function() {
      *      path="/users",
      *      tags={"users"},
      *      summary="Get all users",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Get all users"
@@ -31,6 +34,9 @@ Flight::group('/users', function() {
      *      path="/users/{user_id}",
      *      tags={"users"},
      *      summary="Get user by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="User data, or false if user does not exist"
@@ -49,6 +55,9 @@ Flight::group('/users', function() {
      *      path="/users",
      *      tags={"users"},
      *      summary="Add or update a user",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="User data, or exception if user is not added properly"
@@ -90,6 +99,9 @@ Flight::group('/users', function() {
      *      path="/users/{user_id}",
      *      tags={"users"},
      *      summary="Edit user by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Updated user data"
@@ -120,6 +132,9 @@ Flight::group('/users', function() {
      *      path="/users/{user_id}",
      *      tags={"users"},
      *      summary="Delete user by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Deleted user data or 500 status code exception otherwise"

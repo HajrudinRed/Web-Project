@@ -26,7 +26,7 @@ Flight::group('/reviews', function() {
     * )
     */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('reviewsService')->getReviews();
         Flight::json(["data" => $data]);
     });

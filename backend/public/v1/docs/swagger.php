@@ -13,7 +13,7 @@ if($port === '8000') {
 } else if($host == 'localhost' || $host == '127.0.0.1'){
    define('BASE_URL', 'http://localhost/web-project/backend');
 } else {
-   define('BASE_URL', 'https://localhost/web-project/backend');
+   define('BASE_URL', 'https://seal-app-uwfcc.ondigitalocean.app/backend/');
 }
 $openapi = \OpenApi\Generator::scan([
    __DIR__ . '/doc_setup.php',

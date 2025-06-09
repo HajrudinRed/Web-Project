@@ -22,7 +22,7 @@ Flight::group('/categories', function() {
      * )
      */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('categoriesService')->getCategories();
         Flight::json(["data" => $data]);
     });

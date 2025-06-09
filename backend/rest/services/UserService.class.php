@@ -12,7 +12,9 @@ class UserService extends BaseService {
     }
 
     public function addUser($user) {
-        $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+        if (isset($user['password'])) {
+            $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+        }
         return $this->userDao->addUser($user);
     }
 
@@ -32,10 +34,14 @@ class UserService extends BaseService {
     public function editUser($user) {
         $user_id = $user['id'];
         unset($user['id']);
+        if (isset($user['password']) && !empty($user['password'])) {
+            $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+        }
 
         $this->userDao->editUser($user_id, $user);
     }
 }
+
 
 ?>
 

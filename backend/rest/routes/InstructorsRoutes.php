@@ -22,9 +22,10 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('instructorsService')->getInstructors();
-        Flight::json(["data" => $data]);
+        //Flight::json(["data" => $data]);
+        Flight::json($data);
     });
 
     /**

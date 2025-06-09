@@ -15,7 +15,8 @@ class ReviewsService extends BaseService {
 
     public function getReviews() {
         $data = $this->reviewDao->getReviews();
-        return ["data" => $data];
+        //return ["data" => $data];
+        return $data;
     }
 
     public function getReviewByID($review_id) {

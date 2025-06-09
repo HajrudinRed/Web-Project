@@ -15,7 +15,8 @@ class CoursesService extends BaseService {
 
     public function getCourses() {
         $data = $this->coursesDao->getCourses();
-        return ["data" => $data];
+        //return ["data" => $data];
+        return $data;
     }
 
     public function getCourseByID($course_id) {

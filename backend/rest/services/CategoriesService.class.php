@@ -15,7 +15,8 @@ class CategoriesService extends BaseService {
 
     public function getCategories() {
         $data = $this->categoriesDao->getCategories();
-        return ["data" => $data];
+        //return ["data" => $data];
+        return $data;
     }
 
     public function getCategoryByID($category_id) {

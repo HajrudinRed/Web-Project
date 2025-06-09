@@ -15,7 +15,8 @@ class InstructorsService extends BaseService {
 
     public function getInstructors() {
         $data = $this->instructorsDao->getInstructors();
-        return ["data" => $data];
+        //return ["data" => $data];
+        return $data;
     }
 
     public function getInstructorByID($instructor_id) {

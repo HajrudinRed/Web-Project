@@ -1,7 +1,9 @@
 <?php
+require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . '/BaseService.class.php';
 require_once __DIR__ . '/../dao/AuthDao.php';
 require_once __DIR__ . '/../services/UserService.class.php';
+require_once __DIR__ . '/../config.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
@@ -31,11 +33,9 @@ class AuthService extends BaseService {
         if($email_exists){
             return ['success' => false, 'error' => 'Email already registered.'];
         }
-
         $created_user = $this->user_service->addUser($entity);
-        unset($created_user['password']);
 
-        return ['success' => true, 'data' => $created_user];             
+        return ['success' => true, 'data' => $created_user];    
     }
 
 

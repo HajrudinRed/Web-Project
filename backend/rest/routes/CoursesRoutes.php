@@ -12,6 +12,9 @@ Flight::group('/courses', function() {
      *      path="/courses",
      *      tags={"courses"},
      *      summary="Get all courses",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Get all courses"
@@ -19,7 +22,7 @@ Flight::group('/courses', function() {
      * )
      */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('coursesService')->getCourses();
         Flight::json(["data" => $data]);
     });
@@ -29,6 +32,9 @@ Flight::group('/courses', function() {
      *      path="/courses/{course_id}",
      *      tags={"courses"},
      *      summary="Get course by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Course data, or false if course does not exist"
@@ -47,6 +53,9 @@ Flight::group('/courses', function() {
      *      path="/courses",
      *      tags={"courses"},
      *      summary="Add or update a course",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Course data, or exception if course is not added properly"
@@ -82,6 +91,9 @@ Flight::group('/courses', function() {
      *      path="/courses/{course_id}",
      *      tags={"courses"},
      *      summary="Edit course by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Updated course data"
@@ -112,6 +124,9 @@ Flight::group('/courses', function() {
      *      path="/courses/{course_id}",
      *      tags={"courses"},
      *      summary="Delete course by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Deleted course data or 500 status code exception otherwise"

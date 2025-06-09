@@ -13,7 +13,13 @@
 /**
 * @OA\Server(
 *     url= "http://localhost/web-project/backend",
-*     description="Educos API server"
+*     description="Educos API server (XAMPP - Primary)"
+* )
+*/
+/**
+* @OA\Server(
+*     url= "http://localhost:8000",
+*     description="Educos API server (Development)"
 * )
 */
 /**

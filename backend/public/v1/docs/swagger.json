@@ -1,0 +1,1020 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API",
+        "description": "Educos API",
+        "contact": {
+            "name": "Educos",
+            "email": "educos@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost/web-project/backend",
+            "description": "Educos API server (XAMPP - Primary)"
+        },
+        {
+            "url": "http://localhost:8000",
+            "description": "Educos API server (Development)"
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register new user.",
+                "description": "Add a new user to the database.",
+                "requestBody": {
+                    "description": "Add new user",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password",
+                                    "email",
+                                    "name",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "role": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "name": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "password": {
+                                        "description": "User password",
+                                        "type": "string",
+                                        "example": "some_password"
+                                    },
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "demo@gmail.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User has been added."
+                    },
+                    "500": {
+                        "description": "Internal server error."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login to system using email and password",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User email address",
+                                        "type": "string",
+                                        "example": "demo@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "User password",
+                                        "type": "string",
+                                        "example": "some_password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User data and JWT token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 65
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "John Doe"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "demo@gmail.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2025-06-03 22:23:00"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Login failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid username or password."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get all categories",
+                "responses": {
+                    "200": {
+                        "description": "Get all categories"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Add or update a category",
+                "requestBody": {
+                    "description": "Category data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "number_of_courses",
+                                    "image_url",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "Category ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "name": {
+                                        "description": "Category name",
+                                        "type": "string",
+                                        "example": "Programming"
+                                    },
+                                    "number_of_courses": {
+                                        "description": "Number of courses in the category",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "image_url": {
+                                        "description": "Category image URL",
+                                        "type": "string",
+                                        "example": "http://example.com/image.jpg"
+                                    },
+                                    "description": {
+                                        "description": "Category description",
+                                        "type": "string",
+                                        "example": "Courses related to programming."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category data, or exception if category is not added properly"
+                    }
+                }
+            }
+        },
+        "/categories/{category_id}": {
+            "get": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Get category by ID",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category data, or false if category does not exist"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Edit category by ID",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Category data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "number_of_courses",
+                                    "image_url",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Category name",
+                                        "type": "string",
+                                        "example": "Programming"
+                                    },
+                                    "number_of_courses": {
+                                        "description": "Number of courses in the category",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "image_url": {
+                                        "description": "Category image URL",
+                                        "type": "string",
+                                        "example": "http://example.com/image.jpg"
+                                    },
+                                    "description": {
+                                        "description": "Category description",
+                                        "type": "string",
+                                        "example": "Courses related to programming."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated category data"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Delete category by ID",
+                "parameters": [
+                    {
+                        "name": "category_id",
+                        "in": "path",
+                        "description": "Category ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted category data or 500 status code exception otherwise"
+                    }
+                }
+            }
+        },
+        "/courses": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Get all courses",
+                "responses": {
+                    "200": {
+                        "description": "Get all courses"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Add or update a course",
+                "requestBody": {
+                    "description": "Course data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "category"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "Course ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "title": {
+                                        "description": "Course title",
+                                        "type": "string",
+                                        "example": "Introduction to Programming"
+                                    },
+                                    "description": {
+                                        "description": "Course description",
+                                        "type": "string",
+                                        "example": "Learn the basics of programming."
+                                    },
+                                    "category": {
+                                        "description": "Course category",
+                                        "type": "string",
+                                        "example": "Programming"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Course data, or exception if course is not added properly"
+                    }
+                }
+            }
+        },
+        "/courses/{course_id}": {
+            "get": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Get course by ID",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "path",
+                        "description": "Course ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course data, or false if course does not exist"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Edit course by ID",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "path",
+                        "description": "Course ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Course data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "category"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "Course title",
+                                        "type": "string",
+                                        "example": "Introduction to Programming"
+                                    },
+                                    "description": {
+                                        "description": "Course description",
+                                        "type": "string",
+                                        "example": "Learn the basics of programming."
+                                    },
+                                    "category": {
+                                        "description": "Course category",
+                                        "type": "string",
+                                        "example": "Programming"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated course data"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "courses"
+                ],
+                "summary": "Delete course by ID",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "path",
+                        "description": "Course ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted course data or 500 status code exception otherwise"
+                    }
+                }
+            }
+        },
+        "/instructors": {
+            "get": {
+                "tags": [
+                    "instructors"
+                ],
+                "summary": "Get all instructors",
+                "responses": {
+                    "200": {
+                        "description": "Get all instructors"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "instructors"
+                ],
+                "summary": "Add or update an instructor",
+                "requestBody": {
+                    "description": "Instructor data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "bio",
+                                    "qualification",
+                                    "experience_years",
+                                    "profile_picture_url"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "Instructor ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "bio": {
+                                        "description": "Instructor bio",
+                                        "type": "string",
+                                        "example": "Experienced instructor"
+                                    },
+                                    "qualification": {
+                                        "description": "Instructor qualification",
+                                        "type": "string",
+                                        "example": "PhD in Computer Science"
+                                    },
+                                    "experience_years": {
+                                        "description": "Years of experience",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "profile_picture_url": {
+                                        "description": "Profile picture URL",
+                                        "type": "string",
+                                        "example": "http://example.com/image.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Instructor data, or exception if instructor is not added properly"
+                    }
+                }
+            }
+        },
+        "/instructors/{instructor_id}": {
+            "get": {
+                "tags": [
+                    "instructors"
+                ],
+                "summary": "Get instructor by ID",
+                "parameters": [
+                    {
+                        "name": "instructor_id",
+                        "in": "path",
+                        "description": "Instructor ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Instructor data, or false if instructor does not exist"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "instructors"
+                ],
+                "summary": "Edit instructor by ID",
+                "parameters": [
+                    {
+                        "name": "instructor_id",
+                        "in": "path",
+                        "description": "Instructor ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Instructor data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "bio",
+                                    "qualification",
+                                    "experience_years",
+                                    "profile_picture_url"
+                                ],
+                                "properties": {
+                                    "bio": {
+                                        "description": "Instructor bio",
+                                        "type": "string",
+                                        "example": "Experienced instructor"
+                                    },
+                                    "qualification": {
+                                        "description": "Instructor qualification",
+                                        "type": "string",
+                                        "example": "PhD in Computer Science"
+                                    },
+                                    "experience_years": {
+                                        "description": "Years of experience",
+                                        "type": "integer",
+                                        "example": "10"
+                                    },
+                                    "profile_picture_url": {
+                                        "description": "Profile picture URL",
+                                        "type": "string",
+                                        "example": "http://example.com/image.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated instructor data"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "instructors"
+                ],
+                "summary": "Delete instructor by ID",
+                "parameters": [
+                    {
+                        "name": "instructor_id",
+                        "in": "path",
+                        "description": "Instructor ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted instructor data or 500 status code exception otherwise"
+                    }
+                }
+            }
+        },
+        "/reviews": {
+            "get": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Get all reviews",
+                "responses": {
+                    "200": {
+                        "description": "Get all reviews"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Add or update a review",
+                "requestBody": {
+                    "description": "Review data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rating",
+                                    "review_text"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "Review ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "rating": {
+                                        "description": "Rating",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "review_text": {
+                                        "description": "Review text",
+                                        "type": "string",
+                                        "example": "Great course!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Review data, or exception if review is not added properly"
+                    }
+                }
+            }
+        },
+        "/reviews/{review_id}": {
+            "get": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Get review by ID",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "Review ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Review data, or false if review does not exist"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Edit review by ID",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "Review ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Review data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rating",
+                                    "review_text"
+                                ],
+                                "properties": {
+                                    "rating": {
+                                        "description": "Rating",
+                                        "type": "integer",
+                                        "example": "5"
+                                    },
+                                    "review_text": {
+                                        "description": "Review text",
+                                        "type": "string",
+                                        "example": "Great course!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated review data"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "reviews"
+                ],
+                "summary": "Delete review by ID",
+                "parameters": [
+                    {
+                        "name": "review_id",
+                        "in": "path",
+                        "description": "Review ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted review data or 500 status code exception otherwise"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "Get all users"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add or update a user",
+                "requestBody": {
+                    "description": "User data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "description": "User ID",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "name": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "description": "User password",
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "role": {
+                                        "description": "User role",
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User data, or exception if user is not added properly"
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user by ID",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data, or false if user does not exist"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Edit user by ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "requestBody": {
+                    "description": "User data payload",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "User name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "User email",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "role": {
+                                        "description": "User role",
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated user data"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user by ID",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "User ID",
+                        "schema": {
+                            "type": "number"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deleted user data or 500 status code exception otherwise"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKey": {
+                "type": "apiKey",
+                "name": "Authentication",
+                "in": "header"
+            }
+        }
+    }
+}

@@ -51,10 +51,15 @@ class BaseDao
         $values = ':' . implode(', :', array_keys($entity));
 
         $query = "INSERT INTO {$table} ({$columns}) VALUES ({$values})";
-
+        try { 
+        // Fix This ..
         $stmt = $this->connection->prepare($query);
         $stmt->execute($entity);
         $entity['id'] = $this->connection->lastInsertId();
-        return $entity;
+        return $entity; // Fix: return the entity with the new ID
+    } catch (PDOException $e) {
+        // Add error handling
+        throw new Exception("Database insert failed: " . $e->getMessage());
+     } 
     }
 }

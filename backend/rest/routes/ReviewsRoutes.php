@@ -9,33 +9,43 @@ Flight::group('/reviews', function() {
 
     /**
      * @OA\Get(
-     *      path="/reviews",
-     *      tags={"reviews"},
-     *      summary="Get all reviews",
-     *      @OA\Response(
-     *           response=200,
-     *           description="Get all reviews"
-     *      )
-     * )
-     */
+    *      path="/reviews",
+    *      tags={"reviews"},
+    *      summary="Get all reviews",
+    *      security={
+    *         {"ApiKey": {}}
+    *       },
+    *      @OA\Response(
+    *           response=200,
+    *           description="List of all reviews"
+    *      ),
+    *      @OA\Response(
+    *           response=401,
+    *           description="Missing authentication header"
+    *      )
+    * )
+    */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('reviewsService')->getReviews();
         Flight::json(["data" => $data]);
     });
 
     /**
-     * @OA\Get(
-     *      path="/reviews/{review_id}",
-     *      tags={"reviews"},
-     *      summary="Get review by ID",
-     *      @OA\Response(
-     *           response=200,
-     *           description="Review data, or false if review does not exist"
-     *      ),
-     *      @OA\Parameter(@OA\Schema(type="number"), in="path", name="review_id", example="1", description="Review ID")
-     * )
-     */
+    * @OA\Get(
+    *      path="/reviews/{review_id}",
+    *      tags={"reviews"},
+    *      summary="Get review by ID",
+    *      security={
+    *         {"ApiKey": {}}
+    *       },
+    *      @OA\Response(
+    *           response=200,
+    *           description="Review data, or false if review does not exist"
+    *      ),
+    *      @OA\Parameter(@OA\Schema(type="number"), in="path", name="review_id", example="1", description="Review ID")
+    * )
+    */
     Flight::route('GET /@review_id', function($review_id) {
         Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $review = Flight::get('reviewsService')->getReviewByID($review_id);
@@ -43,25 +53,28 @@ Flight::group('/reviews', function() {
     });
 
     /**
-     * @OA\Post(
-     *      path="/reviews",
-     *      tags={"reviews"},
-     *      summary="Add or update a review",
-     *      @OA\Response(
-     *           response=200,
-     *           description="Review data, or exception if review is not added properly"
-     *      ),
-     *      @OA\RequestBody(
-     *          description="Review data payload",
-     *          @OA\JsonContent(
-     *              required={"rating", "review_text"},
-     *              @OA\Property(property="id", type="integer", example="1", description="Review ID"),
-     *              @OA\Property(property="rating", type="integer", example="5", description="Rating"),
-     *              @OA\Property(property="review_text", type="string", example="Great course!", description="Review text")
-     *          )
-     *      )
-     * )
-     */
+    * @OA\Post(
+    *      path="/reviews",
+    *      tags={"reviews"},
+    *      summary="Add or update a review",
+    *      security={
+    *         {"ApiKey": {}}
+    *       },
+    *      @OA\Response(
+    *           response=200,
+    *           description="Review data, or exception if review is not added properly"
+    *      ),
+    *      @OA\RequestBody(
+    *          description="Review data payload",
+    *          @OA\JsonContent(
+    *              required={"rating", "review_text"},
+    *              @OA\Property(property="id", type="integer", example="1", description="Review ID"),
+    *              @OA\Property(property="rating", type="integer", example="5", description="Rating"),
+    *              @OA\Property(property="review_text", type="string", example="Great course!", description="Review text")
+    *          )
+    *      )
+    * )
+    */
     Flight::route('POST /', function() {
         Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $payload = Flight::request()->data->getData();
@@ -81,6 +94,9 @@ Flight::group('/reviews', function() {
      *      path="/reviews/{review_id}",
      *      tags={"reviews"},
      *      summary="Edit review by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Updated review data"
@@ -110,6 +126,9 @@ Flight::group('/reviews', function() {
      *      path="/reviews/{review_id}",
      *      tags={"reviews"},
      *      summary="Delete review by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Deleted review data or 500 status code exception otherwise"

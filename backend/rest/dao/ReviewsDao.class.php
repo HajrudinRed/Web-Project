@@ -12,8 +12,13 @@ class ReviewsDao extends BaseDao {
     }    
 
     public function getReviews() {
-        $query = "SELECT * 
-        FROM reviews";
+        $query = "SELECT 
+            r.*,
+            u.name as user_name,
+            u.email as user_email
+        FROM reviews r
+        LEFT JOIN users u ON r.user_id = u.id
+        ORDER BY r.id DESC";
 
         return $this->query($query, []);
     }
@@ -31,7 +36,7 @@ class ReviewsDao extends BaseDao {
     public function deleteReview($review_id) {
         $query = "DELETE FROM reviews WHERE id = :id";
         $this->execute($query, [
-            'id' => $reviews_id
+            'id' => $review_id
         ]);
     }
 

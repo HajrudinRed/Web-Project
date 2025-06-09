@@ -1,8 +1,8 @@
 <?php
-
+require_once __DIR__ . "/BaseService.class.php";
 require_once __DIR__ . "/../dao/InstructorsDao.class.php";
 
-class InstructorsService {
+class InstructorsService extends BaseService {
     private $instructorsDao;
 
     public function __construct() {
@@ -15,7 +15,8 @@ class InstructorsService {
 
     public function getInstructors() {
         $data = $this->instructorsDao->getInstructors();
-        return ["data" => $data];
+        //return ["data" => $data];
+        return $data;
     }
 
     public function getInstructorByID($instructor_id) {

@@ -12,16 +12,27 @@ class InstructorsDao extends BaseDao {
     }    
 
     public function getInstructors() {
-        $query = "SELECT * 
-        FROM instructors";
+        $query = "SELECT 
+            i.*,
+            u.name as user_name,
+            u.email as user_email
+        FROM instructors i
+        LEFT JOIN users u ON i.user_id = u.id
+        WHERE u.role = 'instructor'
+        ORDER BY i.id
+    ";
 
         return $this->query($query, []);
     }
 
     public function getInstructorByID($instructor_id) {
-        $query = "SELECT * 
-        FROM instructors
-        WHERE id = :id";
+        $query = "SELECT 
+            i.*,
+            u.name as user_name,
+            u.email as user_email
+        FROM instructors i
+        LEFT JOIN users u ON i.user_id = u.id
+        WHERE i.id = :id";
 
         return $this->query_unique($query, [
             "id" => $instructor_id
@@ -36,14 +47,20 @@ class InstructorsDao extends BaseDao {
     }
 
     public function editInstructors($instructor_id, $instructor) {
-        $query = "UPDATE instructors SET bio = :bio, qualification = :qualification, experience_years = :experience_years, profile_picture_url = :profile_picture_url WHERE id = :id";
+        $query = "UPDATE instructors SET 
+            bio = :bio, 
+            qualification = :qualification, 
+            experience_years = :experience_years, 
+            specialization = :specialization,
+            profile_picture_url = :profile_picture_url 
+        WHERE id = :id";
 
         $this->execute($query, [
-            "user_id" => $added_user['id'],
             'id' => $instructor_id,
             'bio' => $instructor['bio'],
             'qualification' => $instructor['qualification'],
             'experience_years' => $instructor['experience_years'],
+            'specialization' => $instructor['specialization'] ?? null,
             'profile_picture_url' => $instructor['profile_picture_url']
         ]);
     }

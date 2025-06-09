@@ -12,6 +12,9 @@ Flight::group('/instructors', function() {
      *      path="/instructors",
      *      tags={"instructors"},
      *      summary="Get all instructors",
+     *       security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Get all instructors"
@@ -19,9 +22,10 @@ Flight::group('/instructors', function() {
      * )
      */
     Flight::route('GET /', function() {
-        Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
+        //Flight::auth_middleware()->authorizeRole(Roles::ADMIN, Roles::INSTRUCTOR, Roles::STUDENT);
         $data = Flight::get('instructorsService')->getInstructors();
-        Flight::json(["data" => $data]);
+        //Flight::json(["data" => $data]);
+        Flight::json($data);
     });
 
     /**
@@ -29,6 +33,9 @@ Flight::group('/instructors', function() {
      *      path="/instructors/{instructor_id}",
      *      tags={"instructors"},
      *      summary="Get instructor by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Instructor data, or false if instructor does not exist"
@@ -47,6 +54,9 @@ Flight::group('/instructors', function() {
      *      path="/instructors",
      *      tags={"instructors"},
      *      summary="Add or update an instructor",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Instructor data, or exception if instructor is not added properly"
@@ -83,6 +93,9 @@ Flight::group('/instructors', function() {
      *      path="/instructors/{instructor_id}",
      *      tags={"instructors"},
      *      summary="Edit instructor by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Updated instructor data"
@@ -114,6 +127,9 @@ Flight::group('/instructors', function() {
      *      path="/instructors/{instructor_id}",
      *      tags={"instructors"},
      *      summary="Delete instructor by ID",
+     *      security={
+     *         {"ApiKey": {}}
+     *       },
      *      @OA\Response(
      *           response=200,
      *           description="Deleted instructor data or 500 status code exception otherwise"

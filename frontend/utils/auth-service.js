@@ -1,7 +1,8 @@
 var AuthService = {
   init: function () {
-    var token = localStorage.getItem("user_token");
-    if (token && token !== undefined) {
+    // ✅ Check both token names for consistency
+    var token = localStorage.getItem("jwt_token") || localStorage.getItem("user_token");
+    if (token && token !== "undefined") {
       window.location.replace("index.html");
     }
     $("#login-form").validate({
@@ -21,11 +22,19 @@ var AuthService = {
       dataType: "json",
       success: function (result) {
         console.log(result);
+        // ✅ Store token in both locations for consistency
+        localStorage.setItem("jwt_token", result.data.token);
         localStorage.setItem("user_token", result.data.token);
+        // ✅ Store user data separately
+        if (result.data.user) {
+            localStorage.setItem("user_data", JSON.stringify(result.data.user));
+        }
         window.location.replace("index.html");
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
-        toastr.error(XMLHttpRequest?.responseText ? XMLHttpRequest.responseText : 'Error');
+        if (typeof toastr !== 'undefined') {
+            toastr.error(XMLHttpRequest?.responseText || 'Login failed');
+        }
       },
     });
   },

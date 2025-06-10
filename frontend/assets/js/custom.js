@@ -1,24 +1,9 @@
-$(document).ready(function() {
+// Spapp configuration - this will be initialized from index.html
+// Do not initialize Spapp here to avoid conflicts
 
- 
-
-  var app = $.spapp({pageNotFound : 'error_404'}); // initialize
-
-  // define routes
-  
-  app.route({view: 'about', load: 'about.html' });
-  app.route({view: 'contact', load: 'contact.html' });
-  app.route({view: '404', load: '404.html' });
-  app.route({view: 'courses', load: 'courses.html' });
-  app.route({view: 'team', load: 'team.html' });
-  app.route({view: 'testimonial', load: 'testimonial.html' });
-  // run app
-  app.run();
-
-});
-// Check for JWT token in localStorage
+// Authentication functions
 function getUserFromToken() {
-    const token = localStorage.getItem('jwt_token');
+    const token = localStorage.getItem('jwt_token') || localStorage.getItem('user_token');
     if (!token) return null;
     try {
         // Decode JWT payload
@@ -48,11 +33,31 @@ function updateNavbarForUser() {
 $(document).on('click', '#logout-link', function(e) {
     e.preventDefault();
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_token');
+    localStorage.removeItem('user_data');
     updateNavbarForUser();
     window.location.hash = "#home";
 });
 
-// Run on page load
-$(function() {
-    updateNavbarForUser();
-});
+// Export functions for global use
+window.getUserFromToken = getUserFromToken;
+window.updateNavbarForUser = updateNavbarForUser;
+
+/*$(document).ready(function() {
+
+ 
+
+  var app = $.spapp({pageNotFound : 'error_404'}); // initialize
+
+  // define routes
+  
+  app.route({view: 'about', load: 'about.html' });
+  app.route({view: 'contact', load: 'contact.html' });
+  app.route({view: '404', load: '404.html' });
+  app.route({view: 'courses', load: 'courses.html' });
+  app.route({view: 'team', load: 'team.html' });
+  app.route({view: 'testimonial', load: 'testimonial.html' });
+  // run app
+  app.run();
+
+});*/

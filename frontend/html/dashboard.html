@@ -234,166 +234,125 @@ function checkAuthentication() {
 
 // Load functions (your existing code)
 function loadUsers() {
-    console.log('Loading users...');
     userService.getAll()
         .then(function(data) {
-            console.log('Users response:', data);
             let html = '';
-            // Handle different response formats
-            let users = data.data || data || [];
-            
-            if (users.length === 0) {
-                html = '<tr><td colspan="5" class="text-center">No users found</td></tr>';
-            } else {
-                users.forEach(function(u) {
-                    html += `<tr>
-                        <td>${u.id || 'N/A'}</td>
-                        <td>${u.name || 'N/A'}</td>
-                        <td>${u.email || 'N/A'}</td>
-                        <td>${u.role || 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-user" data-id="${u.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-user" data-id="${u.id}">Delete</button>
-                        </td>
-                    </tr>`;
-                });
-            }
+            (data.data || []).forEach(function(u) {
+                html += `<tr>
+                    <td>${u.id}</td>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td>${u.role}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-user" data-id="${u.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-user" data-id="${u.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
             $('#users-table tbody').html(html);
         })
         .catch(function(error) {
             console.error('Error loading users:', error);
-            $('#users-table tbody').html('<tr><td colspan="5" class="text-center text-danger">Error loading users</td></tr>');
+            alert('Error loading users. Please try again.');
         });
 }
 
 function loadCourses() {
-    console.log('Loading courses...');
     courseService.getAll()
         .then(function(data) {
-            console.log('Courses response:', data);
             let html = '';
-            let courses = data.data || data || [];
-            
-            if (courses.length === 0) {
-                html = '<tr><td colspan="6" class="text-center">No courses found</td></tr>';
-            } else {
-                courses.forEach(function(c) {
-                    html += `<tr>
-                        <td>${c.id || 'N/A'}</td>
-                        <td>${c.title || 'N/A'}</td>
-                        <td>${c.instructor_id || 'N/A'}</td>
-                        <td>${c.category || 'N/A'}</td>
-                        <td>${c.description || 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-course" data-id="${c.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-course" data-id="${c.id}">Delete</button>
-                        </td>
-                    </tr>`;
-                });
-            }
+            (data.data || []).forEach(function(c) {
+                html += `<tr>
+                    <td>${c.id}</td>
+                    <td>${c.title}</td>
+                    <td>${c.instructor_id || ''}</td>
+                    <td>${c.category}</td>
+                    <td>${c.description}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-course" data-id="${c.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-course" data-id="${c.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
             $('#courses-table tbody').html(html);
         })
         .catch(function(error) {
             console.error('Error loading courses:', error);
-            $('#courses-table tbody').html('<tr><td colspan="6" class="text-center text-danger">Error loading courses</td></tr>');
+            alert('Error loading courses. Please try again.');
         });
 }
 
 function loadCategories() {
-    console.log('Loading categories...');
     categoryService.getAll()
         .then(function(data) {
-            console.log('Categories response:', data);
             let html = '';
-            let categories = data.data || data || [];
-            
-            if (categories.length === 0) {
-                html = '<tr><td colspan="5" class="text-center">No categories found</td></tr>';
-            } else {
-                categories.forEach(function(c) {
-                    html += `<tr>
-                        <td>${c.id || 'N/A'}</td>
-                        <td>${c.name || 'N/A'}</td>
-                        <td>${c.number_of_courses || '0'}</td>
-                        <td>${c.description || 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-category" data-id="${c.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-category" data-id="${c.id}">Delete</button>
-                        </td>
-                    </tr>`;
-                });
-            }
+            (data.data || []).forEach(function(c) {
+                html += `<tr>
+                    <td>${c.id}</td>
+                    <td>${c.name}</td>
+                    <td>${c.number_of_courses}</td>
+                    <td>${c.description}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-category" data-id="${c.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-category" data-id="${c.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
             $('#categories-table tbody').html(html);
         })
         .catch(function(error) {
             console.error('Error loading categories:', error);
-            $('#categories-table tbody').html('<tr><td colspan="5" class="text-center text-danger">Error loading categories</td></tr>');
+            alert('Error loading categories. Please try again.');
         });
 }
 
 function loadInstructors() {
-    console.log('Loading instructors...');
     instructorService.getAll()
         .then(function(data) {
-            console.log('Instructors response:', data);
             let html = '';
-            let instructors = data.data || data || [];
-            
-            if (instructors.length === 0) {
-                html = '<tr><td colspan="6" class="text-center">No instructors found</td></tr>';
-            } else {
-                instructors.forEach(function(i) {
-                    html += `<tr>
-                        <td>${i.id || 'N/A'}</td>
-                        <td>${i.user_id || 'N/A'}</td>
-                        <td>${i.bio || 'N/A'}</td>
-                        <td>${i.qualification || 'N/A'}</td>
-                        <td>${i.experience_years || 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-instructor" data-id="${i.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-instructor" data-id="${i.id}">Delete</button>
-                        </td>
-                    </tr>`;
-                });
-            }
+            (data.data || []).forEach(function(i) {
+                html += `<tr>
+                    <td>${i.id}</td>
+                    <td>${i.user_id}</td>
+                    <td>${i.bio}</td>
+                    <td>${i.qualification}</td>
+                    <td>${i.experience_years}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-instructor" data-id="${i.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-instructor" data-id="${i.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
             $('#instructors-table tbody').html(html);
         })
         .catch(function(error) {
             console.error('Error loading instructors:', error);
-            $('#instructors-table tbody').html('<tr><td colspan="6" class="text-center text-danger">Error loading instructors</td></tr>');
+            alert('Error loading instructors. Please try again.');
         });
 }
 
 function loadReviews() {
-    console.log('Loading reviews...');
     reviewService.getAll()
         .then(function(data) {
-            console.log('Reviews response:', data);
             let html = '';
-            let reviews = data.data || data || [];
-            
-            if (reviews.length === 0) {
-                html = '<tr><td colspan="6" class="text-center">No reviews found</td></tr>';
-            } else {
-                reviews.forEach(function(r) {
-                    html += `<tr>
-                        <td>${r.id || 'N/A'}</td>
-                        <td>${r.user_id || 'N/A'}</td>
-                        <td>${r.course_id || 'N/A'}</td>
-                        <td>${r.rating || 'N/A'}</td>
-                        <td>${r.review_text || 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-review" data-id="${r.id}">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-review" data-id="${r.id}">Delete</button>
-                        </td>
-                    </tr>`;
-                });
-            }
+            (data.data || []).forEach(function(r) {
+                html += `<tr>
+                    <td>${r.id}</td>
+                    <td>${r.user_id}</td>
+                    <td>${r.course_id}</td>
+                    <td>${r.rating}</td>
+                    <td>${r.review_text}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-review" data-id="${r.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-review" data-id="${r.id}">Delete</button>
+                    </td>
+                </tr>`;
+            });
             $('#reviews-table tbody').html(html);
         })
         .catch(function(error) {
             console.error('Error loading reviews:', error);
-            $('#reviews-table tbody').html('<tr><td colspan="6" class="text-center text-danger">Error loading reviews</td></tr>');
+            alert('Error loading reviews. Please try again.');
         });
 }
 
